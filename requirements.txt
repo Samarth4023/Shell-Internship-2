@@ -1,10 +1,6 @@
-streamlit==1.43.2
-torch==2.6.0
-transformers==4.49.0
-os
-time
-datetime
-random
+streamlit
+torch
+transformers
 streamlit_extras
 streamlit_extras.add_vertical_space
 streamlit_extras.let_it_rain
