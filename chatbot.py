@@ -9,6 +9,9 @@ from streamlit_extras.add_vertical_space import add_vertical_space
 from streamlit_extras.let_it_rain import rain
 from streamlit_modal import Modal
 
+# Streamlit UI
+st.set_page_config(page_title="ChatBot", layout="wide")
+
 # Load BERT Model & Tokenizer
 MODEL_PATH = "Trained Model/chatbot_model"  # Path where your model & tokenizer are saved
 
