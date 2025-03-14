@@ -1,0 +1,12 @@
+streamlit
+torch
+transformers
+json
+os
+time
+datetime
+random
+streamlit_extras
+streamlit_extras.add_vertical_space
+streamlit_extras.let_it_rain
+streamlit_modal

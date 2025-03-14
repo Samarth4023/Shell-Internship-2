@@ -2,6 +2,7 @@ import streamlit as st
 import torch
 from transformers import BertTokenizer, BertForSequenceClassification
 import json
+import os
 import time
 import datetime
 import random
@@ -21,8 +22,6 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # Load model & tokenizer
 tokenizer = BertTokenizer.from_pretrained(MODEL_PATH)
 model = BertForSequenceClassification.from_pretrained(MODEL_PATH)
-
-# Move model to device
 model.to(device)
 model.eval()
 
@@ -30,10 +29,32 @@ model.eval()
 with open("intents.json", "r") as file:
     intents = json.load(file)
 
-# Create a mapping between index and intent tag
 intent_mapping = {i: intent['tag'] for i, intent in enumerate(intents)}
 
-DEBUG = False  # Set to True only when debugging
+# Chat history file
+CHAT_HISTORY_FILE = "chat_history.json"
+
+# Load Chat History (Ensuring Persistence)
+def load_chat_history():
+    if os.path.exists(CHAT_HISTORY_FILE):
+        with open(CHAT_HISTORY_FILE, "r") as file:
+            return json.load(file)
+    return []
+
+# Save Chat History
+def save_chat_history():
+    with open(CHAT_HISTORY_FILE, "w") as file:
+        json.dump(st.session_state.chat_history, file)
+
+# Initialize session state variables
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = load_chat_history()
+if "show_history" not in st.session_state:
+    st.session_state.show_history = False
+if "show_about" not in st.session_state:
+    st.session_state.show_about = False
+if "chat_input" not in st.session_state:
+    st.session_state.chat_input = ""
 
 def predict_intent(text):
     inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True).to(device)
@@ -41,94 +62,81 @@ def predict_intent(text):
         outputs = model(**inputs)
 
     predicted_index = torch.argmax(outputs.logits, dim=1).item()
-    predicted_tag = intent_mapping.get(predicted_index, "unknown")  # Convert index to tag
-
-    if DEBUG:  # Only print if debugging is enabled
-        print(f"Predicted Index: {predicted_index}, Mapped Intent: {predicted_tag}")
-
-    return predicted_tag
+    return intent_mapping.get(predicted_index, "unknown")
 
 def get_response(intent_label):
-    if DEBUG:
-        print(f"Intent Label: {intent_label}")
-
     for intent in intents:
-        if DEBUG:
-            print(f"Checking: {intent['tag']}")
         if intent_label == intent['tag']:
             return random.choice(intent['responses'])
-
     return "I'm not sure how to respond to that."
-
-# Initialize session state for chat history
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
-if "chat_input" not in st.session_state:
-    st.session_state.chat_input = ""
 
 # Sidebar menu
 with st.sidebar:
+    st.image("Images/Bot Image.jpeg", use_container_width=True)
     st.title("💬 Chatbot Menu")
     add_vertical_space(1)
+
     if st.button("🆕 New Chat"):
-        st.session_state.chat_history = []
         st.session_state.chat_input = ""
-        st.rerun()
+        save_chat_history()
+
     if st.button("📜 Chat History"):
         st.session_state.show_history = True
+
     if st.button("ℹ️ About"):
         st.session_state.show_about = True
 
-# Modals for Chat History and About
+# Modal Windows (Chat History & About)
 history_modal = Modal("Chat History", key="history_modal")
 about_modal = Modal("About", key="about_modal")
 
-if "show_history" in st.session_state and st.session_state.show_history:
+# Display chat history without affecting the chat window
+if st.session_state.show_history:
     with history_modal.container():
         st.subheader("🕰 Chat History")
-        for chat in st.session_state.chat_history:
+        for chat in st.session_state.chat_history[-10:]:  # Show last 10 messages
             st.write(chat)
         if st.button("Close", key="close_history"):
-            st.session_state.show_history = False
+            st.session_state.show_history = False  # Close modal without resetting UI
             st.rerun()
 
-if "show_about" in st.session_state and st.session_state.show_about:
+if st.session_state.show_about:
     with about_modal.container():
         st.subheader("ℹ️ About")
-        st.info("This is an intent-based chatbot powered by BERT, built using Streamlit with an elegant UI.")
+        st.info("This is an intent-based chatbot powered by BERT, built using Streamlit.")
         if st.button("Close", key="close_about"):
-            st.session_state.show_about = False
+            st.session_state.show_about = False  # Close modal without resetting UI
             st.rerun()
 
 # Chat UI
 st.title("🤖 AI Chatbot")
 st.markdown("### Talk to me, I'm listening...")
 
-rain(
-    emoji="💬",
-    font_size=10,
-    falling_speed=5,
-    animation_length="infinite",
-)
+rain(emoji="💬", font_size=10, falling_speed=5, animation_length="infinite")
 
-# User input
-st.session_state.chat_input = st.text_input("You:", st.session_state.chat_input, key="input")
-if st.session_state.chat_input:
-    intent_label = predict_intent(st.session_state.chat_input)
+# Chat Input with Enter Button
+with st.form("chat_form", clear_on_submit=True):
+    chat_input = st.text_input("You:", key="chat_input")
+    submit_button = st.form_submit_button("Enter")
+
+if submit_button and chat_input:
+    intent_label = predict_intent(chat_input)
     response = get_response(intent_label)
     chat_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    st.session_state.chat_history.append(f"[{chat_time}] You: {st.session_state.chat_input}")
+
+    # Append messages to chat history (User & Bot)
+    st.session_state.chat_history.append(f"[{chat_time}] You: {chat_input}")
     st.session_state.chat_history.append(f"[{chat_time}] Bot: {response}")
 
-    # Display conversation
+    # Save chat history persistently
+    save_chat_history()
+
+    # Display conversation immediately
     with st.chat_message("user"):
-        st.markdown(f"**You:** {st.session_state.chat_input}")
+        st.markdown(f"**You:** {chat_input}")
         time.sleep(0.5)
     with st.chat_message("assistant"):
         st.markdown(f"**Bot:** {response}")
-
-    # Clear input box after sending
-    st.session_state.chat_input = ""
 
 # Style customization
 st.markdown("""
