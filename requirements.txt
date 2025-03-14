@@ -1,7 +1,6 @@
 streamlit
 torch
 transformers
-json
 os
 time
 datetime
