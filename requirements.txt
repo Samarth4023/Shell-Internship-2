@@ -1,0 +1,5 @@
+streamlit
+torch
+transformers
+streamlit_extras
+streamlit_modal
