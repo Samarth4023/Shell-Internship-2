@@ -15,7 +15,7 @@ sdk_version: 1.43.2
 ## **📌 Introduction**  
 This project is an **AI-driven chatbot**, developed as part of my **AICTE-Shell Internship**. The chatbot leverages **Natural Language Processing (NLP) and Deep Learning** techniques using **BERT** to provide intelligent responses based on user queries. The chatbot is trained on an **Intent JSON dataset** and fine-tuned to enhance accuracy.  
 
-🔗 **Deployed Application:** [🧠AI Chatbot🤖](https://ai-conversation-chatbot.streamlit.app/)
+🔗 **Deployed Application:** [🧠AI Chatbot🤖](https://huggingface.co/spaces/SamarthPujari/AI-Chatbot)
 
 ## **🎯 Project Goals**  
 ✅ Implement **AI & NLP techniques** for intelligent conversation.  
