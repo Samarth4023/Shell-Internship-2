@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 Trained[[:space:]]Model/bert_chatbot_model.pth filter=lfs diff=lfs merge=lfs -text
 Trained[[:space:]]Model/chatbot_model/model.safetensors filter=lfs diff=lfs merge=lfs -text
-=======
 Trained[[:space:]]Model/bert_chatbot_model.pth filter=lfs diff=lfs merge=lfs -text
 Trained[[:space:]]Model/chatbot_model/model.safetensors filter=lfs diff=lfs merge=lfs -text
 Images/Bot[[:space:]]Image.jpeg filter=lfs diff=lfs merge=lfs -text
->>>>>>> hf/main
