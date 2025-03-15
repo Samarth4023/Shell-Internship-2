@@ -85,25 +85,47 @@ with st.sidebar:
 
     if st.button("ℹ️ About"):
         st.session_state.show_about = True
+    st.caption("🚀 Built with ❤️ by AI Enthusiast")
 
 # Modal Windows (Chat History & About)
-history_modal = Modal("Chat History", key="history_modal")
-about_modal = Modal("About", key="about_modal")
+history_modal = Modal("📜Chat History", key="history_modal")
+about_modal = Modal("ℹ️About", key="about_modal")
 
 # Display chat history without affecting the chat window
 if st.session_state.show_history:
     with history_modal.container():
-        st.subheader("🕰 Chat History")
-        for chat in st.session_state.chat_history[-10:]:  # Show last 10 messages
-            st.write(chat)
+        if st.session_state.chat_history:
+            for chat in st.session_state.chat_history[-10:]:  # Show last 10 messages
+                st.write(chat)
+        else:
+            st.info("No chat history available.")
+
+        # Clear History Button
+        if st.button("🗑 Clear History", key="clear_history"):
+            st.session_state.chat_history = []  # Clear session history
+            if os.path.exists(CHAT_HISTORY_FILE):
+                os.remove(CHAT_HISTORY_FILE)  # Delete saved file
+            st.rerun()  # Refresh UI to reflect changes
+
+        # Close Modal Button
         if st.button("Close", key="close_history"):
-            st.session_state.show_history = False  # Close modal without resetting UI
+            st.session_state.show_history = False
             st.rerun()
 
 if st.session_state.show_about:
     with about_modal.container():
-        st.subheader("ℹ️ About")
-        st.info("This is an intent-based chatbot powered by BERT, built using Streamlit.")
+        st.info("""This chatbot is powered by a deep learning approach using Hugging Face Transformers and a BERT model for intent recognition. 
+It understands user queries by predicting intent and responding with predefined answers based on a trained dataset. 
+
+✅ Natural Language Processing (NLP)​
+                
+🔹 Transformers (Hugging Face) 🤖 – BERT-based intent classification​
+
+✅ Deep Learning​
+                
+🔹 PyTorch 🔥 – Model training & fine-tuning
+""")
+        
         if st.button("Close", key="close_about"):
             st.session_state.show_about = False  # Close modal without resetting UI
             st.rerun()
@@ -113,6 +135,7 @@ st.title("🤖 AI Chatbot")
 st.markdown("### Talk to me, I'm listening...")
 
 rain(emoji="💬", font_size=10, falling_speed=5, animation_length="infinite")
+rain(emoji="❄️", font_size=10, falling_speed=5, animation_length="infinite")
 
 # Chat Input with Enter Button
 with st.form("chat_form", clear_on_submit=True):
@@ -141,8 +164,25 @@ if submit_button and chat_input:
 # Style customization
 st.markdown("""
 <style>
-    .stChatMessage {padding: 10px; border-radius: 10px; background-color: #000000;}
-    .stChatMessageUser {background-color: #000000;}
-    .stChatMessageAssistant {background-color: #000000;}
+
+    /* Fix Modal Height & Enable Scroll */
+    div[data-modal-container="true"] {
+        position: fixed !important;
+        top: 5% !important;  /* Adjust this value to position it higher */
+        color: #000000;
+        max-height: 1000px !important;  /* Set max height */
+    }
+
+    /* Ensure the close button stays visible */
+    div[data-modal-container="true"] button {
+        position: sticky;
+        bottom: 10px;
+        background-color: #000000;
+        color: white;
+    }
+            
+    .stChatMessage {padding: 10px; border-radius: 10px; background-color: #900C3F;}
+    .stChatMessageUser {background-color: #900C3F;}
+    .stChatMessageAssistant {background-color: #900C3F;}
 </style>
 """, unsafe_allow_html=True)
