@@ -184,5 +184,4 @@ st.markdown("""
     .stChatMessage {padding: 10px; border-radius: 10px; background-color: #900C3F;}
     .stChatMessageUser {background-color: #900C3F;}
     .stChatMessageAssistant {background-color: #900C3F;}
-</style>
-""", unsafe_allow_html=True)
+</style>""", unsafe_allow_html=True)
