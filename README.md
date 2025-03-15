@@ -62,7 +62,19 @@ The chatbot is trained on a **custom Intent JSON dataset**, which includes:
 
 | **Streamlit App - Chatbot Interface** |  
 |---------------------------------------|  
-|![Chatbot Screenshot](https://github.com/user-attachments/assets/chatbot-screenshot.png)|  
+|![Screenshot 2025-03-15 122923](https://github.com/user-attachments/assets/8c1efceb-3f62-4b5e-b77b-74d64e6600cb)|
+
+| **Streamlit App - Chatbot Interface** |  
+|---------------------------------------|  
+|![Screenshot 2025-03-15 123114](https://github.com/user-attachments/assets/d7be631b-e5de-46cc-aba1-6dda6f85e04a)|
+
+| **Streamlit App - Chatbot Interface** |  
+|---------------------------------------|  
+|![Screenshot 2025-03-15 123048](https://github.com/user-attachments/assets/d881f663-8335-4228-8c1a-564ba8652370)|
+
+| **Streamlit App - Chatbot Interface** |  
+|---------------------------------------|  
+|![Screenshot 2025-03-15 123003](https://github.com/user-attachments/assets/4a78aba1-77a9-4a34-9740-9217e88518da)|
 
 ## **🎯 Future Improvements**  
 🔹 Expand dataset with **more real-world conversations**.  
