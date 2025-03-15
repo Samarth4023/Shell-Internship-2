@@ -8,6 +8,7 @@ colorTo: purple
 thumbnail: >-
   https://cdn-uploads.huggingface.co/production/uploads/6686260107019f3fe482ce08/xfpa6MidZ5aE9OEP96pi5.jpeg
 short_description: The System on Real-Time Intent Recognition and Conversations
+sdk_version: 1.43.2
 ---
 # **🤖 AI-Powered Chatbot using NLP**  
 
