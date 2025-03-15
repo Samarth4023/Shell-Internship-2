@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 streamlit
 torch
 transformers
 streamlit_extras
 streamlit_modal
+=======
+streamlit
+torch
+transformers
+streamlit_extras
+streamlit_modal
+>>>>>>> hf/main
